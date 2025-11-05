@@ -2,6 +2,10 @@
 # Configuração do Ruff
 # --------------------------------------------
 
+# --------------------------------------------
+# Configuração do Ruff
+# --------------------------------------------
+
 # Compatível com Black
 line-length = 88
 target-version = "py311"
@@ -19,12 +23,28 @@ exclude = [
     "docs/_build",
     "node_modules",
 ]
+# Ativar todos os grupos principais, incluindo Pycodestyle (E, W)
+# para verificar espaçamentos e formatação detalhada
+select = [
+    "E",  # Erros de estilo (pycodestyle)
+    "W",  # Avisos de estilo (pycodestyle)
+    "F",  # Pyflakes (erros de código)
+    "B",  # Bugbear (boas práticas)
+    "I",  # Import order
+    "D",  # Docstrings (pydocstyle)
+    "S",  # Segurança (bandit)
+    "C90" # Complexidade ciclomática
+]
 
-# Regras habilitadas (inclui verificação de complexidade C90)
-select = ["E", "F", "W", "B", "I", "D", "S", "C90"]
+# Ignorar apenas conflitos com Black
+ignore = [
+    "E203",  # Espaço antes de ':', conflita com Black
+    "E501",  # Comprimento da linha, já controlado por line-length
+]
 
-# Ignorar regras que conflitam com o Black
-ignore = ["E203"]
+# Limite de complexidade
+[mccabe]
+max-complexity = 12
 
 # Ignorar avisos específicos por arquivo
 [per-file-ignores]
