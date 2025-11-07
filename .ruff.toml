@@ -1,32 +1,80 @@
-# --------------------------------------------
-# Configuração do Ruff
-# --------------------------------------------
-
-# Compatível com Black
 line-length = 88
+
 target-version = "py311"
 
-# Ignorar diretórios comuns
+# ===================================================================
+#  Global File Path Configuration
+# ===================================================================
+
+# Exclude common directories from linting and formatting.
 exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
     ".git",
-    "__pycache__",
-    ".venv",
-    ".env",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
     ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
     "build",
     "dist",
-    "__pypackages__",
-    "docs/_build",
     "node_modules",
+    "site-packages",
 ]
 
-# Regras habilitadas (inclui verificação de complexidade C90)
-select = ["E", "F", "W", "B", "I", "D", "S", "C90"]
+# ===================================================================
+#  Formatter Configuration (`ruff format`)
+# ===================================================================
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+docstring-code-format = true
 
-# Ignorar regras que conflitam com o Black
-ignore = ["E203"]
 
-# Ignorar avisos específicos por arquivo
-[per-file-ignores]
-"tests/*" = ["D", "S101"]
-"__init__.py" = ["F401"]
+# ===================================================================
+#  Linter Configuration (`ruff check`)
+# ===================================================================
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # Pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "A",    # flake8-builtins
+    "C4",   # flake8-comprehensions
+    "ANN",  # flake8-annotations
+    "RUF",  # Ruff-specific rules
+]
+
+ignore = [
+]
+
+[lint.isort]
+
+
+[lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"tests/*" = [
+    "S101",   # use-of-assert-detected (assert is expected in tests)
+    "ARG001", # unused-function-argument (pytest fixtures)
+    "ARG002", # unused-method-argument (pytest fixtures)
+    "ANN",    # flake8-annotations (less strict typing in tests)
+]
