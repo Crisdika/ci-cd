@@ -26,7 +26,8 @@ jobs:
         run: |
           echo "🔍 Rodando Ruff..."
           # Executa Ruff e salva a saída em um arquivo
-          ruff check . --output-format text > ruff_output.txt || true
+          ruff check .
+          ruff check . > ruff_output.txt || true  # Continua mesmo se houver erros
 
           # Conta o total de ocorrências por código (ex: E501, W292)
           echo ""
