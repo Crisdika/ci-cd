@@ -1,0 +1,66 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # Pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "A",    # flake8-builtins
+    "C4",   # flake8-comprehensions
+    "RUF",  # Ruff-specific rules
+    "ANN001", # Missing type annotation for function argument
+    "ANN201"  # Missing return type annotation for public function
+]
+ignore = [
+    "E501",  # line length, handled by black
+]
+
+[tool.ruff.lint.isort]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+"tests/*" = [
+    "S101",   # use-of-assert-detected (assert is expected in tests)
+    "ARG001", # unused-function-argument (pytest fixtures)
+    "ARG002", # unused-method-argument (pytest fixtures)
+]
