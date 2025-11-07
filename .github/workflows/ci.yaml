@@ -36,7 +36,7 @@ jobs:
               | sort \
               | uniq -c \
               | sort -nr \
-              | awk '{printf "Erro %s > %d\n", $2, $1}'
+              | awk '{printf "Erro %s > %d\n", $2, $1 " vezes"}'
           else
             echo "✅ Nenhum erro encontrado!"
           fi
