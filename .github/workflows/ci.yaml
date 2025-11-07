@@ -26,7 +26,6 @@ jobs:
         run: |
           echo "🔍 Rodando Ruff..."
           # Executa Ruff e salva a saída em um arquivo
-          ruff check .
           ruff check . > ruff_output.txt || true  # Continua mesmo se houver erros
 
           # Conta o total de ocorrências por código (ex: E501, W292)
@@ -35,6 +34,7 @@ jobs:
           grep -oE '\b[A-Z][0-9]{3}\b' ruff_output.txt | sort | uniq -c | sort -nr || echo "Nenhum erro encontrado."
 
           # Verifica se houve algum erro (saída não vazia)
+          ruff check .
           if grep -qE '\b[A-Z][0-9]{3}\b' ruff_output.txt; then
             echo ""
             echo "❌ Ruff encontrou problemas. Corrija antes de prosseguir."
