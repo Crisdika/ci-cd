@@ -32,7 +32,11 @@ jobs:
           echo ""
           echo "📊 ===== RESUMO DE ERROS POR TIPO ====="
           if grep -qE '\b[A-Z][0-9]{3}\b' ruff_output.txt; then
-            grep -oE '\b[A-Z][0-9]{3}\b' ruff_output.txt | sort | uniq -c | sort -nr
+            grep -oE '\b[A-Z][0-9]{3}\b' ruff_output.txt \
+              | sort \
+              | uniq -c \
+              | sort -nr \
+              | awk '{printf "Erro %s > %d\n", $2, $1}'
           else
             echo "✅ Nenhum erro encontrado!"
           fi
