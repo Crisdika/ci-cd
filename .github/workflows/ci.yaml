@@ -19,14 +19,26 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Instalar Ruff
+      - name: Instalar dependências
         run: pip install -r requirements-dev.txt
 
-      - name: Rodar Ruff
+      - name: Rodar Ruff e exibir resumo
         run: |
-          if ruff check .; then
-            echo "✅ Código limpo — sem erros de lint!"
-          else
+          echo "🔍 Rodando Ruff..."
+          # Executa Ruff e salva a saída em um arquivo
+          ruff check . --output-format text > ruff_output.txt || true
+
+          # Conta o total de ocorrências por código (ex: E501, W292)
+          echo ""
+          echo "📊 Resumo de erros por tipo:"
+          grep -oE '\b[A-Z][0-9]{3}\b' ruff_output.txt | sort | uniq -c | sort -nr || echo "Nenhum erro encontrado."
+
+          # Verifica se houve algum erro (saída não vazia)
+          if grep -qE '\b[A-Z][0-9]{3}\b' ruff_output.txt; then
+            echo ""
             echo "❌ Ruff encontrou problemas. Corrija antes de prosseguir."
             exit 1
+          else
+            echo ""
+            echo "✅ Código limpo — sem erros de lint!"
           fi
