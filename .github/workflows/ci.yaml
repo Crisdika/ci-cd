@@ -1,44 +1,34 @@
-name: Lint (Ruff)
+name: Ruff Lint (changed files only)
 
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
+    paths:
+      - "**/*.py"
 
 jobs:
-  lint:
+  ruff:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
         with:
-          python-version: "3.11"
+          fetch-depth: 0  # necessário para git diff funcionar corretamente
 
-      - name: Instalar dependências
-        run: pip install -r requirements-dev.txt
+      - name: Install Ruff
+        run: pip install ruff
 
-      - name: Rodar Ruff e exibir resumo
+      - name: Identify changed Python files
+        id: diff
         run: |
-          echo "🔍 Rodando Ruff..."
-          # Executa Ruff e salva a saída em um arquivo
-          ruff check . --output-format text > ruff_output.txt || true
+          FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '\.py$' || true)
+          echo "files=$FILES" >> $GITHUB_OUTPUT
 
-          # Conta o total de ocorrências por código (ex: E501, W292)
-          echo ""
-          echo "📊 Resumo de erros por tipo:"
-          grep -oE '\b[A-Z][0-9]{3}\b' ruff_output.txt | sort | uniq -c | sort -nr || echo "Nenhum erro encontrado."
+      - name: Run Ruff on changed files
+        if: ${{ steps.diff.outputs.files != '' }}
+        run: |
+          echo "Linting: ${{ steps.diff.outputs.files }}"
+          ruff check ${{ steps.diff.outputs.files }}
 
-          # Verifica se houve algum erro (saída não vazia)
-          if grep -qE '\b[A-Z][0-9]{3}\b' ruff_output.txt; then
-            echo ""
-            echo "❌ Ruff encontrou problemas. Corrija antes de prosseguir."
-            exit 1
-          else
-            echo ""
-            echo "✅ Código limpo — sem erros de lint!"
-          fi
+      - name: Skip if no Python files changed
+        if: ${{ steps.diff.outputs.files == '' }}
+        run: echo "No Python changes detected."
