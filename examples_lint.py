@@ -67,7 +67,7 @@ def example_sim_errors():
         x = 1
     else:
         x = 2
-    
+       
     # Unnecessary ternary
     y = 1 if True else 0
     
